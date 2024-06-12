@@ -1,0 +1,126 @@
+<div class="flex justify-center py-[40px]">
+  <div class="w-[50%] h-fit p-[20px] rounded-lg flex justify-center flex-col border-[1px] border-gray-400 bg-white">
+    <div class="font-bold text-[20px]">Manage Profile</div>
+    <div class="flex flex-row my-[10px] justify-center items-center">
+      <% if (userData.picture === null) { %>
+      <div class="w-[200px] h-[200px] rounded-full overflow-hidden border-[1px] border-gray-400">
+        <div class="w-full h-full flex justify-center items-center bg-gray-100">
+          <span class="material-symbols-outlined text-gray-400 select-none" style="font-size: 80px;">
+            person
+          </span>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="w-[200px] h-[200px] rounded-full overflow-hidden relative border-[1px] border-black bg-gray-300 flex justify-center items-center">
+        <div class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-[20px] font-bold text-black" id="clickmessage"></div>
+        <img src="<%- userData.picture %>" class="h-full max-w-none hover:opacity-40 cursor-pointer" alt="profile picture" id="img">
+      </div>
+      <div class="hidden select-none" id="enlarged">
+        <div id="modal" class="top-0 left-0 fixed z-10 bg-black w-full h-full opacity-90"></div>
+        <span class="material-symbols-outlined z-30 fixed left-[20px] top-[20px] font-bold text-white cursor-pointer hover:text-red-600" style="font-size: 50px;" id="cross">close</span>
+        <img src="<%- userData.picture %>" alt="topicImage" class="top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] fixed z-20 h-[90%]">
+      </div>
+      <% } %>
+      <div class="ml-[20px] flex flex-col relative" id="uploadContainer">
+        <form action="/api/user/profile/edit/image" method="post" id="profileImage">
+          <input type="hidden" name="id" value="<%- userData.id %>">
+          <input type="hidden" name="imagePath" value="<%= userData.picture === null ? '' : userData.picture %>">
+          <button id="clrUploadBtn" type="reset" class="hidden">
+            <div class="absolute top-0 right-[-10px] w-fit h-fit p-[5px] flex justify-center items-center rounded-full bg-red-700 hover:bg-red-800 text-white cursor-pointer select-none">
+              <span class="material-symbols-outlined">
+                delete
+              </span>
+            </div>
+          </button>
+          <label for="file" id="fileContainer" class="flex flex-col items-center justify-center w-fit p-[20px] my-[10px] rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
+            <div class="flex flex-row items-center justify-center">
+              <div>
+                <p class="mb-2 text-sm text-black"><span class="font-semibold">Select Profile Picture</span></p>
+                <p class="text-xs text-black">PNG, JPG (5 MB Max)</p>
+              </div>
+            </div>
+            <div class="text-sm font-semibold mt-[20px] hidden" id="fileName"></div>
+            <input id="file" type="file" class="hidden" />
+          </label>
+          <div class="flex flex-row">
+            <button type="button" id="submitImageBtn" class="w-full px-[10px] py-[5px] bg-gray-100 hover:bg-gray-200 rounded-md"><%= userData.picture === null ? 'Add' : 'Edit' %></button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="w-full mt-[10px] border-[1px] border-gray-400 bg-white rounded-md overflow-hidden" id="createCPDFormInput">
+      <div class="text-[15px] font-semibold hover:bg-gray-50 p-[10px] flex items-center justify-between select-none cursor-pointer" id="openCPDForm">Change Personal Details <span class="material-symbols-outlined ml-[5px]" id="openCPDFormIcon" style="font-size: 30px;">remove</span></div>
+      <span id="createNewCPDForm">
+        <form action="/api/user/profile/edit/perdet" method="post" class="flex flex-col w-full p-[20px]">
+          <div class="w-full flex flex-row">
+            <div class="w-full mr-[20px]">
+              <label class="font-semibold" for="fname">First Name</label>
+              <input type="text" value="<%- userData.fname %>" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="fname" name="fname" required>
+            </div>
+            <div class="w-full">
+              <label class="font-semibold" for="lname">Last Name</label>
+              <input type="text" value="<%- userData.lname %>" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="lname" name="lname" required>
+            </div>
+          </div>
+          <div class="w-full">
+            <label class="font-semibold" for="username">Username</label>
+            <input type="text" value="<%- userData.username %>" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="username" name="username" required>
+          </div>
+          <input type="hidden" name="id" value="<%- userData.id %>">
+          <div class="w-full flex flex-row mt-[10px]">
+            <input type="reset" onclick="clearForm(['fname', 'lname', 'username'])" value="Clear" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+            <input type="submit" value="Edit" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] ml-[10px] cursor-pointer">
+          </div>
+        </form>
+      </span>
+    </div>
+    <div class="w-full mt-[10px] border-[1px] border-gray-400 bg-white rounded-md overflow-hidden" id="createCEFormInput">
+      <div class="text-[15px] font-semibold hover:bg-gray-50 p-[10px] flex items-center justify-between select-none cursor-pointer" id="openCEForm">Change Email <span class="material-symbols-outlined ml-[5px]" id="openCEFormIcon" style="font-size: 30px;">add</span></div>
+      <span id="createNewCEForm" style="display: none;">
+        <form action="/api/user/profile/edit/email" method="post" class="flex flex-col w-full p-[20px]">
+          <div class="pb-[20px] text-[15px] font-semibold">Current Email: <%- userData.email %></div>
+          <div class="w-full">
+            <label class="font-semibold" for="nemail">New Email</label>
+            <input type="text" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="nemail" name="nemail" required>
+          </div>
+          <div class="w-full">
+            <label class="font-semibold" for="password">Current Password</label>
+            <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="cpassword" name="cpassword" required>
+          </div>
+          <input type="hidden" name="id" value="<%- userData.id %>">
+          <div class="w-full flex flex-row mt-[10px]">
+            <input type="reset" value="Clear" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+            <input type="submit" value="Edit" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] ml-[10px] cursor-pointer">
+          </div>
+        </form>
+      </span>
+    </div>
+    <div class="w-full mt-[10px] border-[1px] border-gray-400 bg-white rounded-md overflow-hidden" id="createCPFormInput">
+      <div class="text-[15px] font-semibold hover:bg-gray-50 p-[10px] flex items-center justify-between select-none cursor-pointer" id="openCPForm">Change Password <span class="material-symbols-outlined ml-[5px]" id="openCPFormIcon" style="font-size: 30px;">add</span></div>
+      <span id="createNewCPForm" style="display: none;">
+        <form action="/api/user/profile/edit/passwd" method="post" class="flex flex-col w-full p-[20px]">
+          <div class="w-full">
+            <label class="font-semibold" for="opassword">Old Password</label>
+            <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="opassword" name="opassword" required>
+          </div>
+          <input type="hidden" name="id" value="<%- userData.id %>">
+          <div class="w-full flex flex-row">
+            <div class="w-full mr-[20px]">
+              <label class="font-semibold" for="password">New Password</label>
+              <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="password" name="password" required>
+            </div>
+            <div class="w-full">
+              <label class="font-semibold" for="rpassword">Retype Password</label>
+              <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="rpassword">
+            </div>
+          </div>
+          <div id="pwdvalid" class="mb-[10px] flex justify-center"></div>
+          <div class="w-full flex flex-row mt-[10px]">
+            <input type="reset" value="Clear" id="clrbtn" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+            <input type="submit" id="submitbtn" value="Edit" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] ml-[10px] cursor-pointer" disabled style="background-color: gray; color: white; cursor: default;">
+          </div>
+        </form>
+      </span>
+    </div>
+  </div>
+</div>

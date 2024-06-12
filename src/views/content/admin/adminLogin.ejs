@@ -1,0 +1,17 @@
+<div class="flex justify-center items-center">
+  <div class="bg-white w-[50%] h-fit p-[20px] rounded-lg flex justify-center flex-col">
+    <div class="font-bold text-[20px]">Admin Login</div>
+    <div>
+      <form action="/api/admin/authenticate" class="mt-[20px]" method="post">
+        <label class="font-semibold" for="email">Email</label>
+        <input type="text" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" name="email" id="email" required>
+        <label class="font-semibold" for="password">Password</label>
+        <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" name="password" id="password" required>
+        <div class="flex justify-center w-full mt-[10px]">
+          <input type="reset" value="Clear" class="w-full mr-[20px] bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+          <input type="submit" value="Login" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  fname           String
+  lname           String
+  username        String           @unique
+  email           String           @unique
+  password        String
+  picture         String?
+  threads         Thread[]
+  comments        Comment[]
+  replies         Reply[]
+  threadLikes     ThreadLike[]
+  threadDislikes  ThreadDislike[]
+  commentLikes    CommentLike[]
+  commentDislikes CommentDislike[]
+  replyLikes      ReplyLike[]
+  replyDislikes   ReplyDislike[]
+  topics          Topic[]
+  joined          UserToTopic[]
+  Moderator       Moderator[]
+
+  @@index([username], name: "usernameIndex")
+  @@index([email], name: "emailIndex")
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  url         String  @unique
+  description String?
+  topics      Topic[]
+
+  @@index([url], name: "categoryUrlIndex")
+}
+
+model Topic {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
+  image       String
+  url         String        @unique
+  createdAt   DateTime      @default(now())
+  category    Category      @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  threads     Thread[]
+  creator     User          @relation(fields: [creatorID], references: [id])
+  creatorID   Int
+  joined      UserToTopic[]
+  Moderator   Moderator?    @relation(fields: [moderatorId], references: [id])
+  moderatorId Int?
+
+  @@index([url], name: "topicUrlIndex")
+}
+
+model UserToTopic {
+  userId  Int
+  topicId Int
+  user    User  @relation(fields: [userId], references: [id])
+  topic   Topic @relation(fields: [topicId], references: [id])
+
+  @@id([userId, topicId])
+}
+
+model Moderator {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id])
+  userId           Int
+  role             String
+  permissions      Json
+  moderatedThreads Topic[]
+}
+
+model Thread {
+  id             Int             @id @default(autoincrement())
+  title          String
+  content        Json
+  url            String
+  createdAt      DateTime        @default(now())
+  author         User            @relation(fields: [authorId], references: [id])
+  authorId       Int
+  topic          Topic           @relation(fields: [topicId], references: [id])
+  topicId        Int
+  score          Int             @default(0)
+  comments       Comment[]
+  threadLikes    ThreadLike[]
+  threadDislikes ThreadDislike[]
+  deleted        Boolean         @default(false)
+}
+
+model Comment {
+  id              Int              @id @default(autoincrement())
+  content         String
+  createdAt       DateTime         @default(now())
+  author          User             @relation(fields: [authorId], references: [id])
+  authorId        Int
+  thread          Thread           @relation(fields: [threadId], references: [id])
+  threadId        Int
+  score           Int              @default(0)
+  replies         Reply[]
+  commentLikes    CommentLike[]
+  commentDislikes CommentDislike[]
+  deleted         Boolean          @default(false)
+}
+
+model Reply {
+  id            Int            @id @default(autoincrement())
+  content       String
+  createdAt     DateTime       @default(now())
+  author        User           @relation(fields: [authorId], references: [id])
+  authorId      Int
+  comment       Comment        @relation(fields: [commentId], references: [id])
+  commentId     Int
+  repliedToWhom String?
+  score         Int            @default(0)
+  replyLikes    ReplyLike[]
+  replyDislikes ReplyDislike[]
+  deleted       Boolean        @default(false)
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  fname    String
+  lname    String
+  email    String @unique
+  password String
+}
+
+model ThreadLike {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
+  post   Thread @relation(fields: [postId], references: [id])
+  postId Int
+}
+
+model ThreadDislike {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
+  post   Thread @relation(fields: [postId], references: [id])
+  postId Int
+}
+
+model CommentLike {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId Int
+}
+
+model CommentDislike {
+  id        Int     @id @default(autoincrement())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId Int
+}
+
+model ReplyLike {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  reply   Reply @relation(fields: [replyId], references: [id])
+  replyId Int
+}
+
+model ReplyDislike {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int
+  reply   Reply @relation(fields: [replyId], references: [id])
+  replyId Int
+}

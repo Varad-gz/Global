@@ -1,0 +1,25 @@
+<div class="p-[20px] m-[10px] bg-white rounded-md border-[1px] border-gray-200">
+  <div class="font-bold text-[20px]">Create Topic</div>
+  <div class="flex flex-col items-center mt-[20px]">
+    <div class="mb-[20px] w-full flex justify-start">
+      <a href="/manage/topic/create" class="px-[20px] py-[10px] bg-green-500 hover:bg-green-600 font-semibold rounded-md flex flex-row items-center"><span class="material-symbols-outlined mr-[10px]">topic</span>Create a new topic</a>
+    </div>
+    <div class="font-bold text-[18px] mb-[20px]">Your Topics</div>
+    <% topics.forEach(topic => { %>
+    <div class="flex flex-col w-[60%] mb-[10px]" id="topicId<%- topic.id %>">
+      <div class="w-full bg-gray-100 rounded-md border-[1px] border-gray-400 p-[10px] flex justify-between">
+        <div><%- topic.name %></div>
+        <div>
+          <div data-topic-id="<%- topic.id %>" class="select-none">
+            <span class="material-symbols-outlined text-blue-800 hover:text-blue-900 active:text-gray-900 cursor-pointer" onclick="editTopicImage(event)" data-image="<%- topic.image %>">image</span>
+            <span class="material-symbols-outlined ml-[10px] text-gray-700 hover:text-gray-800 active:text-gray-900 cursor-pointer" onclick="editTopic(event)">edit</span>
+            <% if (topic.count === 0) { %>
+            <span class="material-symbols-outlined ml-[10px] text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer" onclick="deleteTopic(event)">delete</span>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>

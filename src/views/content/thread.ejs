@@ -1,0 +1,87 @@
+<div class="w-full p-[20px]" id="mainThreadPageContainer">
+  <% if (typeof authenticatedUser === 'undefined') { %>
+  <div class="w-full mb-[20px]">
+    <a href="/login?return=<%= typeof loginReturn != 'undefined' ? loginReturn : '' %>" class="bg-white rounded-md border border-gray-200 p-[20px] flex justify-center items-center">
+      <div class="w-fit text-gray-600 flex items-center hover:text-gray-700"><span class="material-symbols-outlined mr-[10px]">login</span>Login to interact</div>
+    </a>
+  </div>
+  <% } %>
+  <div class="bg-white w-full rounded-lg p-[20px]">
+    <div class="flex flex-row justify-between w-full">
+      <div class="flex flex-row w-fit">
+        <a href="/user/<%- thread.author.username %>" class="h-full text-purple-500 hover:text-purple-600 flex items-center font-bold">@<%- thread.author.username %></a>
+        <span class="italic text-[15px] font-bold text-gray-500 ml-[10px]">Posted on: <%- thread.createdAt %></span>
+      </div>
+      <div class="flex flex-row" data-thread-id="<%- thread.id %>" id="thread">
+        <span class="material-symbols-outlined <%= typeof thread.liked != 'undefined' ? 'text-green-600' : '' %> hover:text-green-600 active:text-green-800 select-none cursor-pointer" id="threadLike" onclick="threadLikeButton(event)">thumb_up</span>
+        <span class="mx-[10px] font-semibold" id="counter"><%- thread.score %></span>
+        <span class="material-symbols-outlined <%= typeof thread.disliked != 'undefined' ? 'text-red-600' : '' %> hover:text-red-600 active:text-red-800 select-none cursor-pointer" id="threadDislike" onclick="threadDislikeButton(event)">thumb_down</span>
+        <% if (typeof authenticatedUser != 'undefined' && authenticatedUser.username === thread.author.username && thread.deleted === false || typeof authenticatedUser != 'undefined' && authenticatedUser.role === 'admin') { %>
+        <span class="material-symbols-outlined ml-[20px] text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer" id="threadDelete" onclick="deleteThread(event)">delete</span>
+        <% } %>
+      </div>
+    </div>
+    <span id="contents">
+      <% if (thread.deleted === false) { %>
+      <div class="font-bold text-[30px] my-[10px]"><%- thread.title %></div>
+      <div class="text-[22px] italic my-[10px]"><%- thread.content.text %></div>
+      <% if (typeof thread.content.image != 'undefined') { %>
+      <div class="<%= imgh ? 'h-[500px]' : '' %> flex justify-center class= bg-<%- thread.content.image.bg %> rounded-md my-[10px]">
+        <img src="<%- thread.content.image.path %>" alt="postImage" class="<%= imgh ? 'h-full' : 'w-full' %> <%= imgh ? 'p-[10px]' : '' %> ">
+      </div>
+      <% } %>
+      <% } else { %>
+      <div class="text-[20px] italic font-bold mt-[20px]">[Content Deleted]</div>
+      <% } %>
+    </span>
+  </div>
+  <div class="w-full my-[10px]">
+    <div class="w-full p-[10px] bg-white rounded-md">
+      <textarea id="commentInput" maxlength="300" placeholder="Write a comment..." class="focus:bg-gray-50 border border-gray-300 p-4 rounded-md resize-none w-full overflow-y-hidden placeholder-gray-400 text-[16px] italic my-[10px] outline-none"></textarea>
+      <div class="w-full flex justify-end">
+        <button type="button" class="border border-gray-300 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 rounded-full font-semibold px-[10px] py-[5px] flex items-center justify-center" id="postCommentButton">Send<span class="material-symbols-outlined ml-[5px]">send</span></button>
+      </div>
+    </div>
+  </div>
+  <% if (comments.length > 0) { %>
+  <div class="pl-[10px] border-l-[3px] border-purple-700 mt-[10px]" id="commentsShowcase">
+    <div id="comments" class="flex flex-col w-full">
+      <% comments.forEach(comment => { %>
+      <div id="commentandreplies<%- comment.id %>">
+        <div id="comment<%- comment.id %>" class="bg-white w-full rounded-lg p-[20px] my-[10px]">
+          <div class="flex flex-row justify-between w-full mb-[10px]">
+            <div class="flex flex-row w-fit">
+              <a href="/user/<%- comment.author.username %>" class="h-full text-purple-500 hover:text-purple-600 flex items-center font-bold">@<%- comment.author.username %></a>
+              <span class="italic text-[15px] font-bold text-gray-500 ml-[10px]">Posted on: <%- comment.createdAt %></span>
+            </div>
+            <div class="flex flex-row" data-comment-id="<%- comment.id %>" data-user="<%- comment.author.username %>" data-type="comment">
+              <span class="material-symbols-outlined mr-[20px] text-gray-400 hover:text-gray-500 active:text-gray-800 cursor-pointer select-none" onclick="replyButton(event)">reply</span>
+              <span class="material-symbols-outlined <%= comment.liked ? 'text-green-600' : '' %> hover:text-green-600 active:text-green-800 select-none cursor-pointer" id="commentLike<%- comment.id %>" onclick="commentLikeButton(event)">thumb_up</span>
+              <span class="mx-[10px] font-semibold" id="commentcounter<%- comment.id %>"><%- comment.score %></span>
+              <span class="material-symbols-outlined <%= comment.disliked ? 'text-red-600' : '' %> hover:text-red-600 active:text-red-800 select-none cursor-pointer" id="commentDislike<%- comment.id %>" onclick="commentDislikeButton(event)">thumb_down</span>
+              <% if (typeof authenticatedUser != 'undefined' && authenticatedUser.username === comment.author.username && comment.deleted === false || typeof authenticatedUser != 'undefined' && authenticatedUser.role === 'admin') { %>
+              <span class="material-symbols-outlined ml-[20px] text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer" id="commentDelete<%- comment.id %>" onclick="deleteComment(event)">delete</span>
+              <% } %>
+            </div>
+          </div>
+          <% if (comment.deleted === false) { %>
+          <div class="text-[16px] italic" id="contents<%- comment.id %>"><%- comment.content %></div>
+          <% } else { %>
+          <div class="text-[20px] italic font-bold mt-[20px]">[Content Deleted]</div>
+          <% } %>
+        </div>
+        <div id="replies<%- comment.id %>" class="flex flex-col w-full border-l-[3px] border-purple-800 pl-[10px]">
+          <% if (comment.replyCount > 0) { %>
+          <div class="px-[20px] py-[10px] font-semibold bg-white rounded-md w-fit border border-black cursor-pointer hover:bg-purple-800 hover:text-white" data-comment-id="<%- comment.id %>" onclick="fetchReplies(event)" id="viewmore">View Replies (<%- comment.replyCount %>)</div>
+          <% } %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="w-full p-[30px] flex justify-center items-center text-[20px] font-bold bg-white rounded-md" id="noCommentDiv">
+    No comments Available
+  </div>
+  <% } %>
+</div>

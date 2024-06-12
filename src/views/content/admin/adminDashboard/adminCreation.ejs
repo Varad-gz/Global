@@ -1,0 +1,38 @@
+<div class="flex justify-center py-[30px]">
+  <div class="bg-white w-[50%] h-fit p-[20px] rounded-lg flex justify-center flex-col">
+    <div class="font-bold text-[20px]">Admin Creation</div>
+    <div>
+      <form action="/api/admin/create" class="mt-[20px]" method="post">
+        <div class="w-full flex flex-row">
+          <div class="w-full mr-[20px]">
+            <label class="font-semibold" for="fname">First Name</label>
+            <input type="text" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="fname" name="fname" required>
+          </div>
+          <div class="w-full">
+            <label class="font-semibold" for="lname">Last Name</label>
+            <input type="text" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="lname" name="lname" required>
+          </div>
+        </div>
+        <div class="w-full mr-[20px]">
+          <label class="font-semibold" for="email">Email</label>
+          <input type="text" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="email" name="email" required>
+        </div>
+        <div class="w-full flex flex-row">
+          <div class="w-full mr-[20px]">
+            <label class="font-semibold" for="password">Password</label>
+            <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="password" name="password" required>
+          </div>
+          <div class="w-full">
+            <label class="font-semibold" for="rpassword">Retype Password</label>
+            <input type="password" class="w-full bg-gray-100 outline-none my-[10px] h-[40px] rounded-md p-[10px] focus:bg-gray-200" id="rpassword">
+          </div>
+        </div>
+        <div id="pwdvalid" class="mb-[10px] flex justify-center"></div>
+        <div class="flex justify-center w-full mt-[10px]">
+          <input type="reset" value="Clear" id="clrbtn" class="w-full mr-[20px] bg-red-800 rounded-md text-white hover:bg-red-900 h-[40px] cursor-pointer">
+          <input type="submit" id="submitbtn" value="Register" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer" disabled style="background-color: gray; color: white; cursor: default;">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="flex justify-center py-[20px]">
+  <div class="bg-white w-[50%] h-fit p-[20px] rounded-lg flex justify-center flex-col border-[1px] border-gray-300">
+    <div class="font-bold text-[20px]">Create Topic</div>
+    <div>
+      <form action="/api/user/topic/create" class="mt-[20px]" method="post" id="createTopicForm">
+        <div class="w-full">
+          <% if (typeof categories != 'undefined') { %>
+          <label class="font-semibold" for="category">Select Category</label>
+          <select name="category" id="category" class="w-full bg-gray-100 outline-none my-[10px] rounded-md p-[10px] focus:bg-gray-200">
+            <option value="0" selected disabled>Select a category</option>
+            <% categories.forEach(category=> { %>
+            <option value="<%- category.id %>"><%- category.name %></option>
+            <% }) %>
+          </select>
+          <% } else { %>
+          <input type="hidden" name="category" id="category" value="<%- category.id %>">
+          <div class="mb-[20px] text-[20px] font-semibold text-gray-600">In category: <%- category.name %></div>
+          <% } %>
+        </div>
+        <label class="font-semibold" for="name">Topic Title</label>
+        <input type="text" name="name" id="name" class="w-full h-[40px] bg-gray-100 focus:bg-gray-200 my-[10px] rounded-md outline-none p-[10px]" required>
+        <label class="font-semibold" for="name">Topic Url</label>
+        <input type="text" name="url" id="url" class="w-full h-[40px] bg-gray-100 focus:bg-gray-200 my-[10px] rounded-md outline-none p-[10px]" required>
+        <label class="font-semibold" for="desc">Topic Description</label>
+        <textarea name="desc" id="desc" maxlength="1000" class="w-full h-[120px] resize-none bg-gray-100 focus:bg-gray-200 my-[10px] rounded-md outline-none p-[10px]" required></textarea>
+        <div class="w-full pb-[10px]">
+          <div class="font-semibold">Topic Picture</div>
+          <label for="file" id="fileContainer" class="flex flex-col items-center justify-center w-full py-[20px] my-[10px] rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
+            <div class="flex flex-row items-center justify-center">
+              <span class="material-symbols-outlined mr-[20px]" style="font-size: 40px;">image</span>
+              <div>
+                <p class="mb-2 text-sm text-black"><span class="font-semibold">Click to upload image</span></p>
+                <p class="text-xs text-black">PNG, JPG (5 MB Max)</p>
+              </div>
+            </div>
+            <div class="text-sm font-semibold mt-[20px] hidden" id="fileName"></div>
+            <input id="file" type="file" class="hidden" />
+          </label>
+        </div>
+        <div class="flex justify-center w-full mt-[10px]">
+          <input type="reset" value="Clear" id="clrbtn" class="w-full mr-[20px] bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">
+          <button type="button" id="submitbtn" class="w-full bg-gray-700 rounded-md text-white hover:bg-gray-800 h-[40px] cursor-pointer">Create Topic</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

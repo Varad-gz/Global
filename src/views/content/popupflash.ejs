@@ -1,0 +1,52 @@
+<% if (locals.alert) { %>
+<span class="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-20 h-[100vh] flex justify-center"></span>
+<span class="fixed top-[20px] left-[50%] translate-x-[-50%] bg-white p-[20px] text-black rounded-md flex justify-center flex-col items-center font-semibold">
+  <% if (alert.length === 2) { %>
+  <span class="w-[100%] text-[20px] text-center p-[30px] pb-[10px]"><%- alert[0] %></span>
+  <span class="w-[100%] text-[20px] text-center p-[30px] pt-0"><%- alert[1] %></span>
+  <% } else { %>
+  <span class="w-[100%] text-[20px] text-center p-[30px]"><%- alert[0] %></span>
+  <% } %>
+</span>
+<script>
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
+</script>
+<% } else if (locals.alertWithButton) { %>
+<span class="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-20 h-[100vh] flex justify-center"></span>
+<span class="fixed top-[20px] left-[50%] translate-x-[-50%] bg-white p-[20px] text-black rounded-md flex justify-center flex-col items-center font-semibold">
+  <% if (alertWithButton.length === 2) { %>
+  <span class="w-[100%] text-[20px] text-center p-[30px] pb-[10px]"><%- alertWithButton[0] %></span>
+  <span class="w-[100%] text-[20px] text-center p-[30px] pt-0"><%- alertWithButton[1] %></span>
+  <button class="bg-red-600 hover:bg-red-700 active:bg-red-800 px-[10px] py-[5px] text-white rounded-md" type="button" onclick="closePopup()">Close</button>
+  <% } else { %>
+  <span class="w-[100%] text-[20px] text-center p-[30px]"><%- alertWithButton[0] %></span>
+  <button class="bg-red-600 hover:bg-red-700 active:bg-red-800 px-[10px] py-[5px] text-white rounded-md" type="button" onclick="closePopup()">Close</button>
+  <% } %>
+</span>
+<script>
+  document.body.style.overflow = 'hidden';
+
+  function closePopup() {
+    location.reload();
+  }
+</script>
+<% } else if (locals.logout) { %>
+<span class="fixed top-0 bottom-0 left-0 right-0 bg-black opacity-20 h-[100vh] flex justify-center"></span>
+<span class="fixed top-[20px] left-[50%] translate-x-[-50%] bg-white p-[20px] text-black rounded-md flex justify-center flex-col items-center font-semibold">
+  <span class="w-[100%] text-[20px] text-center p-[30px] pb-[10px]">Want to log out?</span>
+  <span class="w-[100] flex flex-row my-[20px] text-white">
+    <button class="bg-red-600 hover:bg-red-700 active:bg-red-800 px-[10px] py-[5px] mr-[10px] rounded-md" type="button" onclick="closePopup()">Close</button>
+    <button class="bg-gray-700 hover:bg-gray-800 active:bg-gray-900 px-[10px] py-[5px] rounded-md" type="button"><a href="<%- logout %>">Logout</a></button>
+  </span>
+</span>
+<script>
+  document.body.style.overflow = 'hidden';
+
+  function closePopup() {
+    location.reload();
+  }
+</script>
+<% } %>

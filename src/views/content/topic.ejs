@@ -1,0 +1,81 @@
+<div class="w-full px-[10px] flex flex-col">
+  <div class="w-full flex justify-center">
+    <div class="flex flex-col justify-center items-center w-[80%] bg-white p-[20px] rounded-lg shadow-sm shadow-gray-300">
+      <div class="w-[250px] h-[250px] rounded-full overflow-hidden relative bg-white">
+        <div class="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-[20px] font-bold text-black" id="clickmessage"></div>
+        <img src="<%- topic.image %>" alt="topicImage" class="h-full object-cover hover:opacity-40 cursor-pointer" id="img">
+      </div>
+      <div class="w-full">
+        <div class="text-[45px] font-bold flex justify-center"><%- topic.name %></div>
+        <div class="mt-[10px] flex flex-col">
+          <div class="flex flex-row justify-between">
+            <span id="descButton" class="select-none font-semibold text-[18px] w-fit flex-nowrap cursor-pointer flex items-center hover:text-purple-600">Description <span class="material-symbols-outlined" id="descButtonIcon">expand_more</span></span>
+            <div class="flex flex-row items-center">
+              <a href="/user/<%- topic.creator.username %>" class="h-full text-purple-500 hover:text-purple-600 flex items-center font-bold">@<%- topic.creator.username %></a>
+              <span class="italic text-[15px] font-bold text-gray-500 ml-[10px]">Created on: <%- topic.createdAt %></span>
+            </div>
+          </div>
+          <span id="descriptionTextTopic" class="text-[16px] mt-[10px] italic" style="display: none;"><%- topic.description %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-[10px] w-full flex justify-center">
+    <div class="bg-white p-[20px] rounded-lg shadow-sm shadow-gray-300 w-[80%]">
+      <div class="text-[25px] font-semibold mb-[10px]">Threads</div>
+      <% if (typeof authenticatedUser != 'undefined') { %>
+      <div class="flex flex-col" id="formContainer">
+        <button id="createThreadForm" class="my-[10px] w-fit px-[20px] py-[10px] bg-green-500 hover:bg-green-600 font-semibold rounded-md flex items-center"><span class="material-symbols-outlined mr-[10px]">gesture</span>Create Thread</button>
+        <form id="postForm" action="/api/user/create/thread" method="post" class="hidden">
+          <input type="hidden" name="topicId" value="<%- topic.id %>">
+        </form>
+      </div>
+      <% } else { %>
+      <div class="w-full px-[20px] py-[10px]">
+        <a href="/login?return=<%= typeof loginReturn != 'undefined' ? loginReturn : '' %>" class="bg-gray-100 rounded-md border border-gray-200 p-[20px] flex justify-center items-center">
+          <div class="w-fit text-gray-600 flex items-center hover:text-gray-700"><span class="material-symbols-outlined mr-[10px]">login</span>Login to create threads</div>
+        </a>
+      </div>
+      <% } %>
+      <div class="w-full flex flex-col items-center mb-[20px]">
+        <% if (threads.length > 0) { %>
+        <% threads.forEach(thread => { %>
+        <div class="w-[80%] h-fit rounded-lg bg-gray-50 border-[1px] border-gray-200 mt-[10px] overflow-hidden">
+          <div class="flex flex-row items-center justify-between h-[40px] px-[10px]">
+            <a href="/user/<%- thread.author.username %>" class="h-full text-purple-500 hover:text-purple-600 flex items-center font-bold">@<%- thread.author.username %></a>
+            <span class="italic text-[15px] font-bold text-gray-500">Posted on: <%- thread.createdAt %></span>
+          </div>
+          <a href="/t/<%- topic.url %>/th/<%- thread.id %>/<%- thread.url %>" class="w-fit h-fit">
+            <div class="hover:bg-gray-200 p-[10px]">
+              <% if (thread.deleted === false) { %>
+              <div class="text-[22px] font-semibold line-clamp-2">Title: <%- thread.title %></div>
+              <div class="text-[18px] line-clamp-1 italic mt-[10px]"><%- thread.content.text %></div>
+              <% if (typeof thread.content.image != 'undefined') { %>
+              <div class="h-[300px] flex justify-center class= bg-<%- thread.content.image.bg %> p-[5px] rounded-md mt-[10px]">
+                <img src="<%- thread.content.image.path %>" alt="postImage" class="h-full">
+              </div>
+              <% } %>
+              <% } else { %>
+              <div class="text-[20px] italic font-bold mt-[20px]">[Content Deleted]</div>
+              <% } %>
+            </div>
+          </a>
+        </div>
+        <% }) %>
+        <% } else { %>
+        <div class="bg-gray-100 rounded-md p-[30px] font-bold border-[1px] border-gray-400 flex flex-col items-center">
+          <div class="text-[30px]">Currently, there are no threads in this topic.</div>
+          <div class="w-full h-[2px] bg-gray-200 my-[10px]"></div>
+          <div class="mb-[10px]">Be the first one</div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hidden select-none" id="enlarged">
+  <div id="modal" class="top-0 left-0 fixed z-10 bg-black w-full h-full opacity-90"></div>
+  <span class="material-symbols-outlined z-30 fixed left-[20px] top-[20px] font-bold text-white cursor-pointer hover:text-red-600" style="font-size: 50px;" id="cross">close</span>
+  <img src="<%- topic.image %>" alt="topicImage" class="top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] fixed z-20 h-[90%]">
+</div>

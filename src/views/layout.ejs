@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title><%= typeof title != 'undefined' ? title : 'Undefined'%></title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,1,0" />
+
+  <script src="/scripts/navbarMenu.js" type="text/javascript"></script>
+
+  <% if (typeof scripts != 'undefined') { %>
+  <% scripts.forEach(element => { %>
+  <script src="<%= element%>" type="text/javascript"></script>
+  <% }) %>
+  <% } %>
+</head>
+
+<body class="flex flex-col min-h-[100vh] overflow-x-hidden font-sans">
+
+  <% if (typeof authenticatedUser != 'undefined') { %>
+  <%- include('partials/header', {authenticatedUser: authenticatedUser}) %>
+  <% } else { %>
+  <%- include('partials/header') %>
+  <% } %>
+
+  <main class="flex-1 relative">
+
+    <% if (typeof nogoback === 'undefined') { %>
+    <div class="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-[10px] text-[18px] font-semibold cursor-pointer text-white mb-[10px] hover:text-black flex flex-row items-center" onclick="history.back()"><span class="material-symbols-outlined">arrow_back_ios</span> Go Back</div>
+    <% } %>
+
+    <%- body %>
+
+  </main>
+
+  <% if (typeof backgroundColor != 'undefined' || typeof backgroundImage != 'undefined') { %>
+  <div id="bgcresolve" class="hidden">
+    <script src="/scripts/bgc.js" type="text/javascript"></script>
+    <div id="<%= typeof backgroundColor != 'undefined' ? 'bgc' : 'bgi' %>"><%= typeof backgroundColor != 'undefined' ? backgroundColor : backgroundImage %></div>
+  </div>
+  <% } %>
+
+  <%- include('partials/footer') %>
+
+  <%- include('content/popupflash') %>
+
+</body>
+
+</html>

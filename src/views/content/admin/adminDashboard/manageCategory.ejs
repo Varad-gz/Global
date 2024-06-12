@@ -1,0 +1,32 @@
+<div class="w-full flex flex-col bg-gray-50 pb-[20px]">
+  <div class="p-[10px]">
+    <div class="bg-white p-[20px] rounded-lg shadow-sm shadow-gray-300">
+      <div class="text-[25px] font-semibold">Manage Categories</div>
+      <div class="flex flex-col items-center mt-[20px]">
+        <% if (categories.length === 0) { %>
+        <span class="text-[20px] font-bold text-gray-400">No Categories Found</span>
+        <% } else {%>
+        <div class="w-full flex flex-col items-center">
+          <% categories.forEach(category => { %>
+          <div class="w-[60%] mb-[10px]" id="categoryID<%- category.id %>">
+            <div class="w-full bg-gray-100 text-[17px] font-semibold rounded-md p-[10px] flex justify-between">
+              <span><%- category.name %></span>
+              <div data-category-id="<%- category.id %>" class="select-none">
+                <span class="material-symbols-outlined text-gray-700 hover:text-gray-800 active:text-gray-900 cursor-pointer" onclick="editCategory(event)">edit</span>
+                <span class="material-symbols-outlined ml-[10px] text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer" onclick="deleteCategory(event)">delete</span>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <% } %>
+        <div class="w-full flex justify-center mt-[10px]">
+          <!-- <button id="createForm" class="flex items-center bg-green-700 px-[10px] py-[5px] hover:bg-green-800 rounded-md active:bg-green-900 text-white"><span class="text-[20px] font-semibold">Create New Category</span><span class="material-symbols-outlined ml-[5px]">add</span></button> -->
+          <div class="w-[60%] border-[2px] border-gray-200 rounded-md" id="createFormInput">
+            <div class="text-[20px] font-semibold hover:bg-gray-100 p-[20px] flex items-center justify-between select-none cursor-pointer" id="openForm">Create New Category <span class="material-symbols-outlined ml-[5px]" id="openFormIcon" style="font-size: 40px;">add</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

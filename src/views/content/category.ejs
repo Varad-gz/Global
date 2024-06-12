@@ -1,0 +1,36 @@
+<div class="flex justify-center items-center flex-col mb-[20px]">
+  <div class="text-[40px] mt-[20px] mb-[10px]"><%- catName %></div>
+  <% if (typeof authenticatedUser != 'undefined' && topics.length > 0) { %>
+  <div class="w-full flex justify-start mb-[10px] pb-[10px] pt-[10px] pl-[20px] border-t-[1px] border-b-[1px] border-gray-100">
+    <div class="w-fit">
+      <a href="/manage/topic/create" class="px-[20px] py-[10px] bg-green-500 hover:bg-green-600 font-semibold rounded-md flex flex-row items-center"><span class="material-symbols-outlined mr-[10px]">topic</span>Create a new topic</a>
+    </div>
+  </div>
+  <% } %>
+  <div class="flex flex-row flex-wrap justify-center mt-[10px]">
+    <% if (topics.length > 0) { %>
+    <% topics.forEach(topic => { %>
+    <a href="/t/<%- topic.url %>" class="mr-[10px]">
+      <div class="w-[300px] h-[300px] bg-gray-50 border-[1px] border-gray-400 rounded-md p-[10px] flex flex-col items-center hover:bg-gray-200 hover:border-black">
+        <div class="w-[180px] h-[180px] rounded-md overflow-hidden mb-[10px] border-[1px] border-black bg-white">
+          <img src="<%- topic.image %>" alt="topicImage" class="w-full h-full object-cover">
+        </div>
+        <h1 class="font-bold"><%- topic.name %></h1>
+        <div class="line-clamp-2"><%- topic.description %></div>
+      </div>
+    </a>
+    <% }) %>
+    <% } else { %>
+    <div class="bg-gray-100 rounded-md p-[30px] font-bold border-[1px] border-gray-400 flex flex-col items-center">
+      <div class="text-[30px]">Currently, there are no topics available in this category.</div>
+      <div class="w-full h-[2px] bg-gray-200 my-[10px]"></div>
+      <div class="mb-[10px]">Be the first one to create a topic in this category</div>
+      <% if (typeof authenticatedUser != 'undefined') { %>
+      <a href="/manage/topic/create?inCategory=<%- catName %>&for=<%- catid %>" class="w-fit text-gray-600 flex items-center hover:text-gray-700"><span class="material-symbols-outlined mr-[10px]">topic</span>Create a new topic</a>
+      <% } else { %>
+      <a href="/login" class="w-fit text-gray-600 flex items-center hover:text-gray-700"><span class="material-symbols-outlined mr-[10px]">login</span>Login to create a new topic</a>
+      <% } %>
+    </div>
+    <% } %>
+  </div>
+</div>
